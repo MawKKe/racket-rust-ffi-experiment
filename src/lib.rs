@@ -1,5 +1,7 @@
 use std::ffi::{c_double, c_float};
 
+mod thing;
+
 #[no_mangle]
 pub extern "C" fn rust_hello() {
     println!("Hello from Rust!");

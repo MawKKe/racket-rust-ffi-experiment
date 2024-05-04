@@ -1,5 +1,7 @@
 #lang racket
 
+(require ffi/unsafe)
+
 (require (prefix-in rust: "bindings.rkt"))
 
 (displayln ">>> Racket begin <<<")
@@ -25,5 +27,21 @@
 
 (define num-list (list->vector (range 11)))
 (printf "rust_sum_ints(~a) = ~a~%" num-list (rust:sum-ints num-list))
+
+(displayln "---")
+
+(define t (rust:make-thing))
+
+(printf "rust_make_thing() = ~a, tag: ~a~%" t (cpointer-tag t))
+
+(let loop ([ctr 0])
+  (when (ctr . < . 3)
+    (printf "rust_thing_incr(~a) = ~a~%" t (rust:thing-incr t))
+    (loop (add1 ctr))))
+
+(printf "rust_thing_free(~a)~%" t)
+(rust:thing-free t)
+
+(displayln "---")
 
 (displayln ">>> Racket end <<<")

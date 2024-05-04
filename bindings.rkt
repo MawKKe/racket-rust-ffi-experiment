@@ -12,6 +12,12 @@
 (define-ffi-definer foo-define
     (ffi-lib "libfoo" #:get-lib-dirs get-rust-build-dirs))
 
+(define _THING-pointer (_cpointer 'Thing))
+
+(foo-define make-thing  (_fun (_uint8 = 0) -> _THING-pointer) #:c-id rust_thing_new)
+(foo-define thing-incr (_fun _THING-pointer -> _uint8) #:c-id rust_thing_incr)
+(foo-define thing-free  (_fun _THING-pointer -> _void) #:c-id rust_thing_free)
+
 (foo-define hello (_fun -> _void) #:c-id rust_hello)
 (foo-define add-ints (_fun _int64 _int64 -> _int64) #:c-id rust_add_ints)
 (foo-define add-floats (_fun _float _float -> _float) #:c-id rust_add_floats)
@@ -40,4 +46,5 @@
 (define (COMPLEX->complex c)
   (make-rectangular (COMPLEX-a c) (COMPLEX-b c)))
 
-(provide hello add-ints add-floats add-doubles sum-complex sum-ints)
+(provide hello add-ints add-floats add-doubles sum-complex sum-ints
+         make-thing thing-incr thing-free)
